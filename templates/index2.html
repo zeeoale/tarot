@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Estrazione Carta</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      color: white;
+    }
+
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -1;
+      object-fit: cover;
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding-top: 80px;
+    }
+
+    .header-images {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .header-images img {
+      max-height: 70px;
+      width: auto;
+    }
+
+    .card-container {
+      perspective: 1000px;
+      width: 300px;
+      margin: auto;
+    }
+
+    .flip-card {
+      width: 100%;
+      height: 450px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 1s;
+    }
+
+    .flip-card.flip {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+
+    .card-back {
+      background: #000;
+    }
+
+    .card-front {
+      transform: rotateY(180deg);
+    }
+
+    .card-face img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <video autoplay muted loop class="background-video">
+    <source src="/helly_ryu/static/0507.mp4" type="video/mp4">
+  </video>
+
+  <div class="content-wrapper">
+    <div class="header-images">
+      <img src="/helly_ryu/static/sinistra.png" alt="Sinistra">
+      <img src="/helly_ryu/static/header.png" width="500px" alt="Header">
+      <img src="/helly_ryu/static/destra.png" alt="Destra">
+    </div>
+
+    <div class="card-container">
+      <div class="flip-card" id="flipCard">
+        <div class="card-face card-back">
+          <img src="/helly_ryu/static/cards/back.jpg" alt="Retro carta">
+        </div>
+        <div class="card-face card-front">
+          <img id="frontImage" src="" alt="Carta estratta">
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-light" onclick="flipAndDraw()">Scopri il tuo Destino</button>
+  </div>
+
+  <script>
+    function flipAndDraw() {
+      fetch("draw_card")
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('frontImage').src = data.card;
+          document.getElementById('flipCard').classList.add('flip');
+        });
+    }
+  </script>
+</body>
+</html>

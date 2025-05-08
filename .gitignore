@@ -1,0 +1,52 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+*.venv
+.env
+.venv/
+env/
+venv/
+*.sqlite3
+
+# Byte-compiled / optimized / DLL files
+*.so
+*.dll
+*.dylib
+
+# Logs and databases
+*.log
+*.db
+
+# Flask-related
+instance/
+*.pyc
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Compiled HTML preview
+*.html.save
+
+# Mac
+._*
+
+# Audio/video files
+*.mp4
+*.mp3
+
+# Images
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# Git
+.git/

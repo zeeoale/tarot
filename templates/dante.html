@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Tenebris Arcanum</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      color: white;
+    }
+
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -1;
+      object-fit: cover;
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding-top: 80px;
+    }
+
+    .card-container {
+      perspective: 1000px;
+      width: 300px;
+      margin: auto;
+    }
+
+    .flip-card {
+      width: 100%;
+      height: 450px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 1s;
+    }
+
+    .flip-card.flip {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+
+    .card-back {
+      background: #000;
+    }
+
+    .card-front {
+      transform: rotateY(180deg);
+    }
+
+    .card-face img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+    }
+    .home-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #333;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s;
+      z-index: 10;
+    }
+
+    .home-button:hover {
+      background-color: rgba(255, 255, 255, 1);
+    }
+    @keyframes glow {
+  0% {
+    box-shadow: 0 0 0px 0px rgba(255, 255, 180, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px 15px rgba(255, 255, 180, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 0px 0px rgba(255, 255, 180, 0.3);
+  }
+}
+
+.card-front.glow {
+  animation: glow 1.5s ease-in-out;
+}
+  </style>
+
+</head>
+
+<body>
+  <audio id="flipSound" src="{{ url_for('static', filename='audio/flipcard-91468.mp3') }}"></audio>
+
+  <a href="/helly_ryu/" class="home-button">🏠 Torna alla Home</a>
+
+
+  <video autoplay muted loop class="background-video">
+    <source src="/helly_ryu/static/0507.mp4" type="video/mp4">
+  </video>
+
+  <div class="content-wrapper">
+    <h2 class="mb-4"><img src="/helly_ryu/static/tenebris.png" width="300px" alt="Tenebris Arcanum"></h2>
+    <div class="card-container">
+      <div class="flip-card" id="flipCard">
+        <div class="card-face card-back">
+          <img src="/helly_ryu/static/dante/back.jpg" alt="Retro carta">
+        </div>
+        <div class="card-face card-front" id="frontFace">
+          <img id="frontImage" src="" alt="Carta estratta">
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-light" onclick="flipAndDraw()">Scopri il tuo Destino</button>
+  </div>
+
+  <script>
+    function flipAndDraw() {
+      const audio = document.getElementById('flipSound');
+      audio.currentTime = 0;
+      audio.play();
+
+      fetch("/helly_ryu/dante/draw_card")
+        .then(response => response.json())
+        .then(data => {
+          const front = document.getElementById('frontImage');
+          front.src = data.card;
+          document.getElementById('flipCard').classList.add('flip');
+          document.getElementById('frontFace').classList.add('glow');
+
+          setTimeout(() => {
+            document.getElementById('frontFace').classList.remove('glow');
+          }, 1500);
+        });
+    }
+  </script>
+</body>
+</html>
